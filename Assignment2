@@ -1,0 +1,54 @@
+def activitySelectR2L(start, finish):
+    n = len(start)
+    iList = list(range(n))
+    iList.sort(key=lambda i: start[i], reverse=True)  
+    latest = finish[-1]  
+    selected_activities = []
+    for i in iList:
+        if finish[i] <= latest: 
+            selected_activities.append((start[i], finish[i]))
+            latest = start[i] 
+    return selected_activities
+
+def activitySelectL2R(sList, fList):
+    n = len(fList)
+    iList = list(range(n))
+    iList.sort(key=lambda i: fList[i])
+    latest = sList[0]
+    selected_activities = []
+    for i in iList:
+        if sList[i] >= latest:
+            selected_activities.append((sList[i], fList[i]))
+            latest = fList[i]
+    return selected_activities
+
+def display_input_and_selected_activities(n, activities, selected_activities_rl, selected_activities_l2r):
+    print("Input activities:")
+    for i, activity in enumerate(activities):
+        print(f"Activity {i+1}: ({activity[0]}, {activity[1]})")
+
+    print("\nRight to Left Variant:")
+    if selected_activities_rl:
+        for i, activity in enumerate(selected_activities_rl):
+            print(f"Selected Activity {i+1}: ({activity[0]}, {activity[1]})")
+    else:
+        print("No activities selected.")
+
+    print("\nLeft to Right Variant:")
+    if selected_activities_l2r:
+        for i, activity in enumerate(selected_activities_l2r):
+            print(f"Selected Activity {i+1}: ({activity[0]}, {activity[1]})")
+    else:
+        print("No activities selected.")
+
+if __name__ == "__main__":
+    n = int(input("Enter the number of activities: "))
+    activities = []
+    for i in range(n):
+        start, end = map(int, input(f"Enter start and end time for activity {i+1}: ").split())
+        activities.append((start, end))
+
+    selected_activities_rl = activitySelectR2L([start for start, _ in activities], [end for _, end in activities])
+    selected_activities_l2r = activitySelectL2R([start for start, _ in activities], [end for _, end in activities])
+
+    display_input_and_selected_activities(n, activities, selected_activities_rl, selected_activities_l2r)
